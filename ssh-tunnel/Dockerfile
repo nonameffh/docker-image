@@ -13,7 +13,7 @@ ENV USERNAME=root
 ENV HOSTNAME=localhost
 ENV PORT=22
 
-RUN apk add --update openssh-client && rm -rf /var/cache/apk/* && mkdir /opt && mkdir /opt/ssh
+RUN apk add --update openssh-client && rm -rf /var/cache/apk/* && mkdir -p /opt/ssh
 VOLUME /opt/ssh
 WORKDIR /opt/ssh
 
