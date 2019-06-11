@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+ssh -o StrictHostKeyChecking=no \
+    -o ServerAliveCountMax=$ALIVE_COUNT \
+	-o ServerAliveInterval=$ALIVE_INTERVAL \
+	-o TCPKeepAlive=$ALIVE \
+	-i $KEY \
+	-p $PORT \
+	-N -L $LIST_HOST:$LIST_PORT:$REMOTE_HOST:$REMOTE_PORT $USERNAME@$HOSTNAME
