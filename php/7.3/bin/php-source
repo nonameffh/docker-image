@@ -1,0 +1,107 @@
+#!/usr/bin/env sh
+
+set -e
+
+dir=/usr/src/php
+mkdir -p /usr/src && cd /usr/src
+
+usage() {
+	echo
+	echo "PHP sources manager"
+	echo
+	echo "Available commands:"
+	echo " - download: Download sources archive "
+	echo " - verify: Verify checksum of archive"
+	echo " - extract: Extract archive to $dir"
+	echo " - delete: Delete all from $dir"
+	echo
+}
+
+download() {
+    if [ -f "/usr/src/php.tar.xz" ]; then
+        rm -rf /usr/src/php.tar.xz
+    fi
+
+    wget -O /usr/src/php.tar.xz "$PHP_URL"
+
+    result=1
+    if  [ ! -f "/usr/src/php.tar.xz" ]; then
+        result=0
+    fi
+
+    return $result
+}
+
+verify() {
+    result=1
+
+    if [ -n "$PHP_SHA256" ]; then
+        if [ ! "$PHP_SHA256 php.tar.xz | sha256sum -c" ]; then
+            result=0
+        fi
+    fi;
+
+    if [ -n "$PHP_MD5" ]; then
+        if [ ! "$PHP_MD5 php.tar.xz | md5sum -c" ]; then
+            result=0
+        fi
+    fi;
+
+    if [ -n "$PHP_ASC_URL" ]; then
+        wget -O php.tar.xz.asc "$PHP_ASC_URL";
+        export GNUPGHOME="$(mktemp -d)";
+        for key in $PHP_GPG_KEYS; do
+            gpg --keyserver sks-keyservers.net --recv-keys "$key";
+        done;
+
+        if [ ! "gpg --batch --verify php.tar.xz.asc php.tar.xz" ]; then
+            result=0
+        fi
+        rm -rf "$GNUPGHOME";
+    fi;
+
+    return $result
+}
+
+extract() {
+    if [ -d "$dir" ]; then
+        rm -rf "$dir"
+    fi
+
+    mkdir -p "$dir"
+    tar -Jxf /usr/src/php.tar.xz -C "$dir" --strip-components=1
+}
+
+delete() {
+    if [ -d "$dir" ]; then
+        rm -rf "$dir"
+    fi
+    if [ -f "/usr/src/php.tar.xz" ]; then
+        rm -f "/usr/src/php.tar.xz"
+    fi
+}
+
+case "$1" in
+    download)
+        if download; then
+            exit 0
+        fi
+        ;;
+    verify)
+        if verify; then
+            exit 0
+        fi
+        ;;
+	extract)
+        extract
+        exit 0
+        ;;
+	delete)
+        rm -rf "$dir"
+        exit 0
+        ;;
+	*)
+        usage
+        exit 0
+        ;;
+esac
