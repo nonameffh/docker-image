@@ -89,7 +89,7 @@ RUN rm -f $PHP_INI_DIR/php-fpm.conf \
     && rm -rf /usr/src/fpm-conf
     
 WORKDIR /var/www/html
-VOLUME /var/www/html
+
 EXPOSE 9000
 ENTRYPOINT ["/usr/local/bin/entrypoint"]
 CMD ["php-start-fpm"]
