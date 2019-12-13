@@ -12,8 +12,8 @@ COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY bin/* /usr/local/bin/
 RUN chmod +x /usr/local/bin/run-app \
     && mkdir -p /var/tmp/nginx \
-    && chmod -R 1777 /var/tmp/nginx
-
+    && chmod -R 777 /var/tmp/nginx \
+    && chown -R 2000:2000 /var/tmp/nginx
 
 EXPOSE 80
 CMD ["run-app"]
