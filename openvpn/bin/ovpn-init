@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+cd /etc/openvpn
+
+source /etc/openvpn/server/vars
+
+/usr/share/easy-rsa/easyrsa init-pki
+/usr/share/easy-rsa/easyrsa build-ca nopass
+/usr/share/easy-rsa/easyrsa gen-dh
+/usr/share/easy-rsa/easyrsa gen-req server nopass
+/usr/share/easy-rsa/easyrsa sign-req server server 
+openvpn --genkey --secret /etc/openvpn/pki/server.key
+openvpn --genkey --secret /etc/openvpn/pki/tls.key
