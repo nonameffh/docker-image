@@ -15,6 +15,11 @@ docker build --no-cache -t nonameffh/php:7.3-dev 7.3-dev
 docker build --no-cache -t nonameffh/php:7.3-nginx 7.3-nginx
 docker build --no-cache -t nonameffh/php:7.3-dev-nginx 7.3-dev-nginx
 
+docker build --no-cache -t nonameffh/php:7.4 7.4
+docker build --no-cache -t nonameffh/php:7.4-dev 7.4-dev
+docker build --no-cache -t nonameffh/php:7.4-nginx 7.4-nginx
+docker build --no-cache -t nonameffh/php:7.4-dev-nginx 7.4-dev-nginx
+
 docker push nonameffh/php:7.1
 docker push nonameffh/php:7.1-dev
 docker push nonameffh/php:7.1-nginx
@@ -30,3 +35,7 @@ docker push nonameffh/php:7.3-dev
 docker push nonameffh/php:7.3-nginx
 docker push nonameffh/php:7.3-dev-nginx
 
+docker push nonameffh/php:7.4
+docker push nonameffh/php:7.4-dev
+docker push nonameffh/php:7.4-nginx
+docker push nonameffh/php:7.4-dev-nginx

@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+
+set -xe
+
+export CFLAGS="$PHP_CFLAGS" \
+    CPPFLAGS="$PHP_CPPFLAGS" \
+    LDFLAGS="$PHP_LDFLAGS"
+
+gnu_arch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"
+
+## download, verify and extract sources
+phpctl.source download && phpctl.source verify && phpctl.source extract
+
+## build
+cd /usr/src/php \
+    &&  ./configure \
+        --build="$gnu_arch" \
+        --with-config-file-path="$PHP_INI_DIR/" \
+        --with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
+        $PHP_INSTALL_ARGUMENTS \
+        $PHP_EXTRA_INSTALL_ARGUMENTS \
+    && make -j "$(nproc)" \
+    && make install \
+    && { find /usr/local/bin /usr/local/sbin -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
+    && make clean \
+    && phpctl.source delete \
+    && php_deps="$( \
+    		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+    			| tr ',' '\n' \
+    			| sort -u \
+    			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+    	)" \
+    && apk add --no-cache --virtual .php-deps $php_deps \
+    && pecl update-channels \
+    && rm -rf /tmp/pear ~/.pearrc

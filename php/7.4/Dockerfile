@@ -5,6 +5,7 @@ LABEL maintainer="Aleksey Tarasov <nonameffh@gmail.com>"
 ## install dependencies
 RUN apk add --no-cache --virtual .php-deps \
     git \
+    oniguruma-dev \
     icu icu-dev \
     libzip libzip-dev \
     libressl libressl-dev \
@@ -23,10 +24,10 @@ COPY bin/* /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint && \
     chmod +x /usr/local/bin/phpctl*
 
-ENV PHP_VERSION="7.3.16"
+ENV PHP_VERSION="7.4.4"
 ENV PHP_USER_ID="2000"
 ENV PHP_USER_NAME="app" 
-ENV PHP_GPG_KEYS="CBAF69F173A0FEA4B537F470D66C9593118BCCB6 F38252826ACD957EF380D39F2F7956BC5DA04B5D" 
+ENV PHP_GPG_KEYS="5A52880781F755608BF815FC910DEB46F53EA312 42670A7FE4D0441C8E4632349E4FDC074A4EF02D" 
 ENV PHP_URL="https://secure.php.net/get/php-${PHP_VERSION}.tar.xz/from/this/mirror" 
 ENV PHP_ASC_URL="https://secure.php.net/get/php-${PHP_VERSION}.tar.xz.asc/from/this/mirror" 
 ENV PHP_SHA256="" 
@@ -34,6 +35,7 @@ ENV PHP_MD5=""
 ENV PHP_INI_DIR="/etc/php"
 ENV PHP_INSTALL_ARGUMENTS="--enable-fpm --with-fpm-user=${PHP_USER_NAME} --with-fpm-group=${PHP_USER_NAME}"
 ENV PHP_EXTRA_INSTALL_ARGUMENTS="\
+    --with-pear \
     --enable-bcmath \
     --enable-ftp \
     --enable-mbstring \

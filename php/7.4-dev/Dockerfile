@@ -1,4 +1,4 @@
-FROM nonameffh/php:7.3
+FROM nonameffh/php:7.4
 
 LABEL maintainer="Aleksey Tarasov <nonameffh@gmail.com>"
 
