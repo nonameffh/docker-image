@@ -4,4 +4,4 @@ LABEL maintainer="Aleksey Tarasov <nonameffh@gmail.com>"
 
 ## add packages
 RUN pecl install xdebug \
-    && php-enable-extension xdebug.so 
+    && phpctl.enable-extension xdebug.so 

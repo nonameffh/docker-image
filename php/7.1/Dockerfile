@@ -20,7 +20,7 @@ RUN apk add --no-cache --virtual .php-deps \
 
 COPY bin/* /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint && \
-    chmod +x /usr/local/bin/php-*
+    chmod +x /usr/local/bin/phpctl*
 
 ENV PHP_VERSION="7.1.33"
 ENV PHP_USER_ID="2000"
@@ -71,10 +71,10 @@ RUN set -x && \
     ## create php directories
     mkdir -p ${PHP_INI_DIR}/conf.d && mkdir -p ${PHP_INI_DIR}/php-fpm && mkdir -p /var/log/php-fpm; \
     ## install PHP
-    php-install && php-get-composer \
+    phpctl.install && phpctl.get-composer \
     && pecl config-set php_ini $PHP_INI_DIR/php.ini \
     && pecl install amqp memcached redis imagick \
-    && php-enable-extension amqp.so memcached.so opcache.so redis.so imagick.so \
+    && phpctl.enable-extension amqp.so memcached.so opcache.so redis.so imagick.so \
     && echo "PHP and composer installed"
 
 COPY conf/* /usr/src/fpm-conf/
@@ -90,4 +90,4 @@ WORKDIR /var/www/html
 
 EXPOSE 9000
 ENTRYPOINT ["/usr/local/bin/entrypoint"]
-CMD ["php-start-fpm"]
+CMD ["phpctl.start-fpm"]

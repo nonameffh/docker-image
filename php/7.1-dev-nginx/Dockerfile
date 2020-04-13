@@ -4,16 +4,15 @@ LABEL maintainer="Aleksey Tarasov <nonameffh@gmail.com>"
 
 RUN apk add  --no-cache --update \
     supervisor \
-    nginx \
-    && mkdir -p /var/run/nginx
+    nginx 
 
 COPY conf/supervisord.conf /etc/supervisord.conf
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY bin/* /usr/local/bin/
-RUN chmod +x /usr/local/bin/run-app \
-    && mkdir -p /var/tmp/nginx \
-    && chmod -R 777 /var/tmp/nginx \
-    && chown -R 2000:2000 /var/tmp/nginx
+RUN mkdir -p /var/run/nginx && mkdir -p /var/tmp/nginx \
+    && chmod +x /usr/local/bin/app.run \
+    && chmod +x /usr/local/bin/nginx.fix-tmp-owner \
+    && /usr/local/bin/nginx.fix-tmp-owner
 
 EXPOSE 80
-CMD ["run-app"]
+CMD ["app.run"]

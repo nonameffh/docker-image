@@ -9,7 +9,7 @@ export CFLAGS="$PHP_CFLAGS" \
 gnu_arch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"
 
 ## download, verify and extract sources
-php-source download && php-source verify && php-source extract
+phpctl.source download && phpctl.source verify && phpctl.source extract
 
 ## build
 cd /usr/src/php \
@@ -23,7 +23,7 @@ cd /usr/src/php \
     && make install \
     && { find /usr/local/bin /usr/local/sbin -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
     && make clean \
-    && php-source delete \
+    && phpctl.source delete \
     && php_deps="$( \
     		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
     			| tr ',' '\n' \

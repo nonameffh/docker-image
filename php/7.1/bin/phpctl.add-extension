@@ -92,14 +92,14 @@ fi
 popDir="$PWD"
 for ext in $exts; do
 	cd "$ext"
-	[ -e Makefile ] || php-configure-extension "$ext"
+	[ -e Makefile ] || phpctl.configure-extension "$ext"
 	make -j"$j"
 	make -j"$j" install
 	find modules \
 		-maxdepth 1 \
 		-name '*.so' \
 		-exec basename '{}' ';' \
-			| xargs -r php-enable-extension
+			| xargs -r phpctl.enable-extension
 	make -j"$j" clean
 	cd "$popDir"
 done
