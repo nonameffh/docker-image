@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-
-chown -R 2000:2000 /var/tmp/nginx && chown -R 2000:2000 /var/lib/nginx/tmp 

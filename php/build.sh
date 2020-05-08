@@ -39,3 +39,4 @@ docker push nonameffh/php:7.4
 docker push nonameffh/php:7.4-dev
 docker push nonameffh/php:7.4-nginx
 docker push nonameffh/php:7.4-dev-nginx
+
